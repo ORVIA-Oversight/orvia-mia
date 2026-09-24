@@ -1,8 +1,9 @@
 (() => {
   const DB_NAME = "mia-memories-local";
-  const DB_VERSION = 1;
+  const DB_VERSION = 2;
   const STORE_MEMORIES = "memories";
   const STORE_FILES = "files";
+  const STORE_AUDIT = "audit";
   let db;
   let currentView = "home";
 
@@ -24,6 +25,10 @@
         if(!d.objectStoreNames.contains(STORE_FILES)){
           d.createObjectStore(STORE_FILES,{keyPath:"id"});
         }
+        if(!d.objectStoreNames.contains(STORE_AUDIT)){
+          const a=d.createObjectStore(STORE_AUDIT,{keyPath:"id"});
+          a.createIndex("createdAt","createdAt");
+        }
       };
       req.onsuccess=()=>resolve(req.result);
       req.onerror=()=>reject(req.error);
@@ -36,6 +41,8 @@
   const getFile=async id=>reqP(txStore(STORE_FILES).get(id));
   const putMemory=async item=>reqP(txStore(STORE_MEMORIES,"readwrite").put(item));
   const putFile=async item=>reqP(txStore(STORE_FILES,"readwrite").put(item));
+  const putAudit=async item=>reqP(txStore(STORE_AUDIT,"readwrite").put(item));
+  const allAudit=async()=>reqP(txStore(STORE_AUDIT).getAll());
   const deleteMemory=async id=>{
     const memory=await getMemory(id);
     if(memory?.mediaIds?.length){
@@ -43,6 +50,7 @@
       memory.mediaIds.forEach(fid=>t.delete(fid));
     }
     await reqP(txStore(STORE_MEMORIES,"readwrite").delete(id));
+    await putAudit({id:uid(),action:"DELETE",memoryId:id,title:memory?.title||"",createdAt:new Date().toISOString()});
   };
 
   async function hashBlob(blob){
@@ -176,6 +184,7 @@
         <tr><td>Import timestamp</td><td>Recorded</td></tr>
         <tr><td>Date certainty</td><td>Explicit label</td></tr>
         <tr><td>GPS / EXIF extraction</td><td>Not yet connected</td></tr>
+        <tr><td>Archive export</td><td>Manifest + original binaries + audit trail</td></tr>
       </table></section>
     </div>`;
   }
@@ -253,17 +262,70 @@
       recipient:$("recipient").value.trim(),releaseType:$("releaseType").value,mediaIds,
       createdAt:existing?.createdAt||now,updatedAt:now,synthetic:false
     };
-    await putMemory(record);$("memoryDialog").close();await render();toast(existing?"Memory updated":"Memory preserved");
+    await putMemory(record);
+    await putAudit({id:uid(),action:existing?"UPDATE":"CREATE",memoryId:id,title:record.title,createdAt:now});
+    $("memoryDialog").close();await render();toast(existing?"Memory updated":"Memory preserved");
+  }
+  function safeTarName(value){
+    return String(value||"file").normalize("NFKD").replace(/[^a-zA-Z0-9._/-]+/g,"_").replace(/^\/+|\/+$/g,"").slice(-96) || "file";
+  }
+  function writeTarText(buf,offset,length,value){
+    const bytes=new TextEncoder().encode(String(value));
+    buf.set(bytes.slice(0,length),offset);
+  }
+  function writeTarOctal(buf,offset,length,value){
+    const out=Math.max(0,Number(value)||0).toString(8).padStart(length-1,"0").slice(-(length-1))+"\0";
+    writeTarText(buf,offset,length,out);
+  }
+  function tarHeader(name,size,mtime){
+    const h=new Uint8Array(512);
+    writeTarText(h,0,100,name);
+    writeTarOctal(h,100,8,0o644); writeTarOctal(h,108,8,0); writeTarOctal(h,116,8,0);
+    writeTarOctal(h,124,12,size); writeTarOctal(h,136,12,Math.floor((mtime||Date.now())/1000));
+    for(let i=148;i<156;i++) h[i]=32;
+    h[156]="0".charCodeAt(0); writeTarText(h,257,6,"ustar"); writeTarText(h,263,2,"00");
+    let sum=0; for(const b of h) sum+=b;
+    const check=sum.toString(8).padStart(6,"0").slice(-6)+"\0 ";
+    writeTarText(h,148,8,check);
+    return h;
+  }
+  async function makeTar(entries){
+    const chunks=[];
+    for(const entry of entries){
+      const bytes=entry.data instanceof Uint8Array?entry.data:new Uint8Array(await entry.data.arrayBuffer());
+      chunks.push(tarHeader(entry.name,bytes.length,entry.mtime));
+      chunks.push(bytes);
+      const pad=(512-(bytes.length%512))%512;
+      if(pad) chunks.push(new Uint8Array(pad));
+    }
+    chunks.push(new Uint8Array(1024));
+    return new Blob(chunks,{type:"application/x-tar"});
   }
   async function exportArchive(){
     const memories=await allMemories();
-    const manifest={product:"MIA Memories",formatVersion:"0.1-local-mvp",exportedAt:new Date().toISOString(),notice:"This JSON manifest does not contain binary media. Media remain in this browser-local prototype.",memories:[]};
+    const audit=(await allAudit()).sort((a,b)=>(a.createdAt||"").localeCompare(b.createdAt||""));
+    const manifest={
+      product:"MIA Memories",
+      formatVersion:"0.2-local-mvp",
+      exportedAt:new Date().toISOString(),
+      notice:"Archive contains a JSON manifest, audit trail and original uploaded binaries. Synthetic demonstration memories are explicitly labelled.",
+      memories:[],
+      audit
+    };
+    const entries=[];
     for(const m of memories){
       const files=await Promise.all((m.mediaIds||[]).map(getFile));
-      manifest.memories.push({...m,mediaIds:undefined,files:files.map(f=>({id:f.id,name:f.name,type:f.type,size:f.size,lastModified:f.lastModified,sha256:f.sha256,importedAt:f.importedAt}))});
+      manifest.memories.push({...m,mediaIds:undefined,files:files.filter(Boolean).map(f=>({id:f.id,name:f.name,type:f.type,size:f.size,lastModified:f.lastModified,sha256:f.sha256,importedAt:f.importedAt}))});
+      files.filter(Boolean).forEach((f,i)=>{
+        entries.push({name:safeTarName(`originals/${m.id}/${String(i+1).padStart(2,"0")}-${f.name}`),data:f.blob,mtime:f.lastModified||Date.now()});
+      });
     }
-    const blob=new Blob([JSON.stringify(manifest,null,2)],{type:"application/json"});
-    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`mia-memories-export-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(a.href);toast("Archive manifest exported");
+    const manifestBytes=new TextEncoder().encode(JSON.stringify(manifest,null,2));
+    entries.unshift({name:"mia-manifest.json",data:manifestBytes,mtime:Date.now()});
+    const blob=await makeTar(entries);
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`mia-memories-archive-${new Date().toISOString().slice(0,10)}.tar`;a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+    toast("Archive exported with originals");
   }
 
   document.querySelectorAll(".nav-item").forEach(b=>b.addEventListener("click",()=>{currentView=b.dataset.view;render()}));
