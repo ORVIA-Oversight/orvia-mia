@@ -368,3 +368,23 @@ input,textarea,select{border-color:#cfdbe3}
   .main{padding:0 28px 70px}
 }
 .pwa-standalone .orvia-app-bar{padding-top:calc(12px + env(safe-area-inset-top))}
+
+.mobile-more-sheet{display:none}
+@media(max-width:760px){
+  .mobile-more-sheet{
+    display:grid;position:fixed;z-index:59;left:12px;right:12px;
+    bottom:calc(82px + env(safe-area-inset-bottom));
+    padding:10px;border-radius:20px;
+    background:rgba(7,29,61,.98);backdrop-filter:blur(20px);
+    box-shadow:0 20px 50px rgba(8,38,83,.28);
+    border:1px solid rgba(255,255,255,.12)
+  }
+  .mobile-more-sheet[hidden]{display:none}
+  .mobile-more-sheet button,.mobile-more-sheet a{
+    border:0;background:transparent;color:#fff;text-decoration:none;
+    min-height:48px;padding:10px 12px;border-radius:12px;
+    display:flex;align-items:center;gap:12px;text-align:left;font:inherit
+  }
+  .mobile-more-sheet button:hover,.mobile-more-sheet a:hover{background:rgba(255,255,255,.08)}
+  .mobile-more-sheet span{width:24px;text-align:center;color:#f2b544}
+}
