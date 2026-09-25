@@ -88,6 +88,14 @@
     <label><input type="checkbox" name="marketing_consent"> I would like occasional MIA news and offers. <span class="small">(optional)</span></label>
   </div></fieldset>
 
+  <div><label><strong>What would you like to do next?</strong><select name="next_step_preference">
+    <option value="">Choose if known</option>
+    <option value="book_story_session">Book / confirm my Story Session</option>
+    <option value="upload_material">Start with photographs or files</option>
+    <option value="speak_to_mia">Speak to the MIA team first</option>
+    <option value="not_sure">I am not sure yet</option>
+  </select></label></div>
+
   <fieldset><legend>Starting work</legend><div class="checks">
     <label><input type="checkbox" name="early_start_requested"> I expressly ask MIA to begin the service during the 14-day cancellation period.</label>
     <label><input type="checkbox" name="early_start_acknowledged"> If I ask MIA to start early, I understand I may have to pay for service supplied before I cancel, and that if the service is fully performed after my express request and acknowledgement I may lose the right to cancel once it is fully performed.</label>
@@ -112,31 +120,93 @@
 <script src="assets/mia.js"></script>
 <script>
 (function(){
+ const FUNCTION_URL='https://qokkyynptzeuuebykmbo.supabase.co/functions/v1/mia-onboarding';
+ const API_KEY='sb_publishable_4EaQGyC5dYqhCIiAPcymVg_SIouLR5h';
  const qs=new URLSearchParams(location.search), sid=qs.get('session_id');
  const status=document.getElementById('payment-status'), form=document.getElementById('mia-onboarding'), result=document.getElementById('onboarding-result');
  const fw=document.getElementById('founder-wrap'), fv=document.getElementById('founder-video');
- if(fv){fv.addEventListener('loadeddata',()=>fw.style.display='block'); fv.addEventListener('error',()=>fw.style.display='none');}
- if(!sid){status.innerHTML='<strong>We cannot see a checkout reference.</strong><br><span class="small">If you have paid, contact hello@orvia.org.uk and we will help you continue.</span>'; return;}
+ if(fv){fv.addEventListener('loadeddata',()=>fw.style.display='block');fv.addEventListener('error',()=>fw.style.display='none');}
+
+ async function callBackend(payload){
+   const r=await fetch(FUNCTION_URL,{
+     method:'POST',
+     headers:{'Content-Type':'application/json','apikey':API_KEY},
+     body:JSON.stringify(payload)
+   });
+   const d=await r.json().catch(()=>({}));
+   if(!r.ok) throw new Error(d.error||'MIA could not complete that step.');
+   return d;
+ }
+
+ if(!sid){
+   status.innerHTML='<strong>We cannot see a checkout reference.</strong><br><span class="small">If you have paid, contact hello@orvia.org.uk and we will help you continue.</span>';
+   return;
+ }
+
  document.getElementById('session_id').value=sid;
- fetch('/api/verify-payment?session_id='+encodeURIComponent(sid),{cache:'no-store'}).then(r=>r.json()).then(d=>{
-   if(!d.verified) throw new Error('Payment not verified');
-   status.innerHTML='<strong>Booking confirmed.</strong><br><span class="small">'+(d.service_label||'MIA service')+(d.customer_name?' · '+d.customer_name:'')+'</span>';
-   form.hidden=false;
- }).catch(()=>{status.innerHTML='<strong>We could not verify the payment automatically.</strong><br><span class="small">Please contact hello@orvia.org.uk before entering information here.</span>';});
+
+ (async()=>{
+   try{
+     let verified=null;
+     for(let attempt=0;attempt<4;attempt++){
+       try{
+         verified=await callBackend({action:'verify',session_id:sid});
+         break;
+       }catch(err){
+         if(attempt===3) throw err;
+         status.innerHTML='<strong>Finalising your booking…</strong><br><span class="small">Stripe has returned you to MIA. We are waiting for the secure payment confirmation.</span>';
+         await new Promise(r=>setTimeout(r,1500));
+       }
+     }
+     status.innerHTML='<strong>Booking confirmed.</strong><br><span class="small">'+
+       (verified.service_label||'MIA service')+(verified.customer_name?' · '+verified.customer_name:'')+'</span>';
+     form.hidden=false;
+   }catch(err){
+     status.innerHTML='<strong>We could not confirm the booking automatically.</strong><br><span class="small">'+
+       escapeHtml(err.message||'Please contact hello@orvia.org.uk before entering information here.')+'</span>';
+   }
+ })();
 
  form.addEventListener('submit',async e=>{
-   e.preventDefault(); const fd=new FormData(form);
-   const payload={session_id:sid,who_for:fd.get('who_for'),privacy_boundaries:fd.get('privacy_boundaries')||'',
-     preserve_types:fd.getAll('preserve_types'),material_types:fd.getAll('material_types'),
+   e.preventDefault();
+   const fd=new FormData(form);
+   const payload={
+     action:'submit',
+     session_id:sid,
+     who_for:fd.get('who_for'),
+     privacy_boundaries:fd.get('privacy_boundaries')||'',
+     preserve_types:fd.getAll('preserve_types'),
+     material_types:fd.getAll('material_types'),
      contributors:fd.get('contributors')?[fd.get('contributors')]:[],
-     ai_transcription_consent:fd.has('ai_transcription_consent'),publicity_consent:fd.has('publicity_consent'),
-     future_presence_consent:fd.has('future_presence_consent'),marketing_consent:fd.has('marketing_consent'),
-     early_start_requested:fd.has('early_start_requested'),early_start_acknowledged:fd.has('early_start_acknowledged')};
-   if(payload.early_start_requested && !payload.early_start_acknowledged){alert('Please read and acknowledge the early-start information, or untick the early-start request.');return;}
-   const btn=form.querySelector('button[type=submit]'); btn.disabled=true; btn.textContent='Sending…';
-   try{const r=await fetch('/api/onboarding-submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); const d=await r.json(); if(!r.ok) throw new Error(d.error||'Unable to submit');
-     form.hidden=true; result.innerHTML='<div class="notice"><strong>Thank you. We have your starting point.</strong><br>A real person will review the next step before recording, upload or sensitive processing begins.</div>';
-   }catch(err){alert(err.message);btn.disabled=false;btn.textContent='Send my MIA onboarding';}
+     ai_transcription_consent:fd.has('ai_transcription_consent'),
+     publicity_consent:fd.has('publicity_consent'),
+     future_presence_consent:fd.has('future_presence_consent'),
+     marketing_consent:fd.has('marketing_consent'),
+     early_start_requested:fd.has('early_start_requested'),
+     early_start_acknowledged:fd.has('early_start_acknowledged'),
+     terms_acknowledged:fd.has('terms_ack'),
+     next_step_preference:fd.get('next_step_preference')||''
+   };
+   if(payload.early_start_requested&&!payload.early_start_acknowledged){
+     alert('Please read and acknowledge the early-start information, or untick the early-start request.');
+     return;
+   }
+   const btn=form.querySelector('button[type=submit]');
+   btn.disabled=true;btn.textContent='Saving securely…';
+   try{
+     await callBackend(payload);
+     form.hidden=true;
+     result.innerHTML='<div class="notice"><strong>Thank you. Your MIA starting point is saved.</strong><br>'+
+       'Your onboarding has entered the ORVIA review workflow. The next step is to activate your private MIA workspace.'+
+       '<div style="margin-top:18px"><a class="btn btn-warm" href="/app/login.html">Activate / sign in to MIA</a></div></div>';
+   }catch(err){
+     alert(err.message||'Unable to save onboarding.');
+     btn.disabled=false;btn.textContent='Send my MIA onboarding';
+   }
  });
+
+ function escapeHtml(value){
+   return String(value||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+ }
 })();
 </script></body></html>
