@@ -23,3 +23,18 @@
 @media(max-width:520px){.orvia-landscape__nav a{padding:13px 9px 11px;font-size:10px}.orvia-product-brand .orvia-master-logo{width:126px!important}.orvia-product-brand .orvia-product-name strong{font-size:12px}}
 
 :root{--orvia-accent:var(--orvia-i)}
+
+.orvia-contactbar{background:var(--orvia-o);color:#dfe8f1}
+.orvia-contactbar__inner{width:min(calc(100% - 64px),var(--orvia-wide));margin:0 auto;min-height:36px;display:flex;align-items:center;gap:18px;font:700 12px/1 Inter,Arial,sans-serif}
+.orvia-contactbar a{color:#fff!important;text-decoration:none!important}
+.orvia-contactbar .push{margin-left:auto;color:#b8c8d9}
+.orvia-common-footer{background:#071d3f;color:#c9d5e2;padding:42px 0 18px;margin-top:0}
+.orvia-common-footer__inner{width:min(calc(100% - 64px),var(--orvia-wide));margin:0 auto;display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:32px;align-items:start}
+.orvia-common-footer__brand img{width:185px;height:auto;background:#fff;border-radius:10px;padding:8px}
+.orvia-common-footer h4{margin:0 0 10px;color:#fff;font:800 11px/1 Inter,Arial,sans-serif;letter-spacing:.13em;text-transform:uppercase}
+.orvia-common-footer a{display:block;color:#d7e2ec!important;text-decoration:none!important;margin:7px 0;font:600 12px/1.35 Inter,Arial,sans-serif}
+.orvia-common-footer p{margin:12px 0 0;color:#aebed0;font-size:12px;line-height:1.55;max-width:420px}
+.orvia-common-footer__base{width:min(calc(100% - 64px),var(--orvia-wide));margin:28px auto 0;border-top:1px solid rgba(255,255,255,.12);padding-top:14px;display:flex;gap:16px;flex-wrap:wrap;font-size:10px;color:#91a5ba}
+.orvia-common-footer__base .push{margin-left:auto}
+@media(max-width:820px){.orvia-contactbar__inner,.orvia-common-footer__inner,.orvia-common-footer__base{width:calc(100% - 28px)}.orvia-common-footer__inner{grid-template-columns:1fr 1fr}.orvia-common-footer__brand{grid-column:1/-1}}
+@media(max-width:560px){.orvia-contactbar__inner{gap:10px;font-size:10px}.orvia-contactbar .push{display:none}.orvia-common-footer__inner{grid-template-columns:1fr}.orvia-common-footer__brand{grid-column:auto}.orvia-common-footer__base .push{margin-left:0;width:100%}}
