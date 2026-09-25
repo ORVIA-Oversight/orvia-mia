@@ -38,3 +38,18 @@
 .orvia-common-footer__base .push{margin-left:auto}
 @media(max-width:820px){.orvia-contactbar__inner,.orvia-common-footer__inner,.orvia-common-footer__base{width:calc(100% - 28px)}.orvia-common-footer__inner{grid-template-columns:1fr 1fr}.orvia-common-footer__brand{grid-column:1/-1}}
 @media(max-width:560px){.orvia-contactbar__inner{gap:10px;font-size:10px}.orvia-contactbar .push{display:none}.orvia-common-footer__inner{grid-template-columns:1fr}.orvia-common-footer__brand{grid-column:auto}.orvia-common-footer__base .push{margin-left:0;width:100%}}
+
+.orvia-family-header{background:rgba(255,255,255,.98);border-bottom:1px solid var(--orvia-line);position:sticky;top:0;z-index:70;backdrop-filter:blur(12px)}
+.orvia-family-header__inner{width:min(calc(100% - 64px),var(--orvia-wide));margin:0 auto;min-height:82px;display:flex;align-items:center;gap:24px}
+.orvia-family-header__brand{display:flex;align-items:center;gap:14px;text-decoration:none!important;min-width:0}
+.orvia-family-header__brand img{width:166px!important;height:auto!important;display:block}
+.orvia-family-header__product{border-left:3px solid var(--orvia-accent);padding-left:13px;display:grid;gap:4px;line-height:1}
+.orvia-family-header__product strong{font:900 15px/1 Inter,Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--orvia-accent)}
+.orvia-family-header__product small{font:700 9px/1.2 Inter,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#647383;white-space:nowrap}
+.orvia-family-header__nav{margin-left:auto;display:flex;align-items:center;gap:20px}
+.orvia-family-header__nav a{position:relative;text-decoration:none!important;color:var(--orvia-o)!important;font:800 13px/1 Inter,Arial,sans-serif;padding:31px 0}
+.orvia-family-header__nav a:after{content:"";position:absolute;left:0;right:100%;bottom:18px;height:2px;background:var(--orvia-accent);transition:.18s}
+.orvia-family-header__nav a:hover:after{right:0}
+.orvia-family-header__cta{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 17px;background:var(--orvia-accent);color:#fff!important;text-decoration:none!important;font:850 12px/1 Inter,Arial,sans-serif;border-radius:7px;white-space:nowrap}
+@media(max-width:1050px){.orvia-family-header__nav{display:none}.orvia-family-header__inner{min-height:72px}.orvia-family-header__cta{margin-left:auto}}
+@media(max-width:620px){.orvia-family-header__inner{width:calc(100% - 28px);gap:10px}.orvia-family-header__brand img{width:126px!important}.orvia-family-header__product small{display:none}.orvia-family-header__product strong{font-size:11px}.orvia-family-header__cta{padding:0 11px;font-size:10px}}
