@@ -287,13 +287,54 @@ async function exportArchive(){
 
 async function refresh(){await loadWorkspace();await render()}
 
-document.querySelectorAll('.nav-item').forEach(b=>b.addEventListener('click',()=>{currentView=b.dataset.view;render()}));
+function setView(view){
+  currentView=view;
+  document.getElementById('mobileMoreSheet')?.setAttribute('hidden','');
+  render();
+  document.querySelectorAll('.mobile-nav').forEach(b=>b.classList.toggle('active',b.dataset.view===view));
+}
+
+document.querySelectorAll('.nav-item').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
+document.querySelectorAll('.mobile-nav[data-view]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
+document.querySelectorAll('#mobileMoreSheet [data-view]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
 $('addMemoryBtn').addEventListener('click',openAdd);
+$('mobileAddBtn')?.addEventListener('click',openAdd);
+
+const moreBtn=document.getElementById('mobileMoreBtn');
+const moreSheet=document.getElementById('mobileMoreSheet');
+moreBtn?.addEventListener('click',()=>{
+  if(moreSheet?.hasAttribute('hidden')){
+    moreSheet.removeAttribute('hidden');
+    moreBtn.classList.add('active');
+  }else{
+    moreSheet?.setAttribute('hidden','');
+    moreBtn.classList.remove('active');
+  }
+});
+
+document.getElementById('mobileSignOut')?.addEventListener('click',async()=>{
+  await supabase.auth.signOut();
+  location.replace('./login.html');
+});
 $('exportBtn').addEventListener('click',exportArchive);
 $('cancelDialog').addEventListener('click',()=>$('memoryDialog').close());
 $('closeDetail').addEventListener('click',()=>$('detailDialog').close());
 $('memoryForm').addEventListener('submit',e=>saveForm(e).catch(err=>{console.error(err);alert(err.message||'Could not save memory')}));
+function mergeCapturedFiles(input){
+  const main=$('media');
+  if(!main || !input?.files?.length) return;
+  const dt=new DataTransfer();
+  [...main.files,...input.files].forEach(file=>dt.items.add(file));
+  main.files=dt.files;
+  main.dispatchEvent(new Event('change',{bubbles:true}));
+  input.value='';
+}
+
 $('media').addEventListener('change',()=>{$('fileStatus').innerHTML=[...$('media').files].map(f=>'<span>'+escapeHTML(f.name)+' · '+(f.size/1024/1024).toFixed(2)+' MB · SHA-256 calculated on upload</span>').join('')});
+['cameraCapture','videoCapture','audioCapture'].forEach(id=>{
+  const input=$(id);
+  input?.addEventListener('change',()=>mergeCapturedFiles(input));
+});
 
 (async()=>{
   try{
