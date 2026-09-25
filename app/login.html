@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MIA Memories | Customer access</title>
+<meta name="theme-color" content="#082653">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/mia-app.css">
+</head>
+<body class="mia-login-page">
+<div class="orvia-mini-bar"><span>hello@orvia.org.uk</span><span>0330 043 3703</span><a href="https://orvia.org.uk/">ORVIA Oversight</a></div>
+<main class="login-layout">
+  <section class="login-story">
+    <a href="../" class="login-logo"><img src="../ChatGPT Image Sep 25, 2026, 03_00_49 PM.png" alt="MIA Memories"></a>
+    <p class="eyebrow">YOUR LIFE · YOUR PEOPLE · YOUR STORY</p>
+    <h1>Welcome back to your memories.</h1>
+    <p class="login-lead">Your MIA workspace keeps the story around the photographs — the people, places, voice and meaning that matter to you.</p>
+    <div class="login-principles"><span>Private by default</span><span>Originals preserved</span><span>Human support</span></div>
+  </section>
+  <section class="login-panel-wrap">
+    <form id="loginForm" class="login-card">
+      <p class="eyebrow">MIA CUSTOMER ACCESS</p>
+      <h2>Sign in</h2>
+      <p class="muted">Use the email linked to your MIA Memories account.</p>
+      <label>Email<input id="email" type="email" autocomplete="email" required></label>
+      <label>Password<input id="password" type="password" autocomplete="current-password" minlength="10" required></label>
+      <p id="message" class="login-message" aria-live="polite"></p>
+      <button class="btn btn-primary login-submit" type="submit">Sign in to MIA</button>
+      <p class="login-help">Need access? <a href="../contact.html">Contact MIA</a>. Product access is only enabled where MIA is active on your ORVIA account.</p>
+    </form>
+  </section>
+</main>
+<script type="module">
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.57.4';
+const supabase=createClient('https://qokkyynptzeuuebykmbo.supabase.co','sb_publishable_4EaQGyC5dYqhCIiAPcymVg_SIouLR5h');
+const form=document.getElementById('loginForm'),msg=document.getElementById('message');
+const existing=await supabase.auth.getSession();
+if(existing.data.session) location.replace('./');
+form.addEventListener('submit',async e=>{
+  e.preventDefault(); msg.textContent='Checking your access…';
+  const email=document.getElementById('email').value.trim().toLowerCase();
+  const password=document.getElementById('password').value;
+  const {data,error}=await supabase.auth.signInWithPassword({email,password});
+  if(error){msg.textContent=error.message;return;}
+  const {data:ent,error:entError}=await supabase.from('hub_service_access').select('status').eq('user_id',data.user.id).eq('service_code','mia').eq('status','active').maybeSingle();
+  if(entError||!ent){await supabase.auth.signOut();msg.textContent='MIA Memories is not active on this account. Contact MIA if you believe this is incorrect.';return;}
+  location.replace('./');
+});
+</script>
+</body></html>
