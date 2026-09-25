@@ -1,4 +1,7 @@
 (()=> {
+  const existingIcon=document.querySelector('link[rel~="icon"]');
+  if(existingIcon) existingIcon.setAttribute('href','/favicon.svg');
+  else { const icon=document.createElement('link'); icon.rel='icon'; icon.type='image/svg+xml'; icon.href='/favicon.svg'; icon.id='orvia-family-favicon'; document.head.appendChild(icon); }
   const current='i';
   const landscape=`<div class="orvia-landscape"><div class="orvia-landscape__inner"><span class="orvia-landscape__label">ORVIA LANDSCAPE</span><nav class="orvia-landscape__nav" aria-label="ORVIA landscape"><a class="o" href="https://orvia.org.uk/">Oversight</a><a class="r" href="https://orviavoice.co.uk/"${current==='r'?' aria-current="page"':''}>Voice</a><a class="v" href="https://threshold.orvia.org.uk/"${current==='v'?' aria-current="page"':''}>Threshold</a><a class="i" href="https://mia.orvia.org.uk/"${current==='i'?' aria-current="page"':''}>MIA</a><a class="a" href="https://web.orvia.org.uk/"${current==='a'?' aria-current="page"':''}>Web</a></nav></div></div>`;
   const contact=`<div class="orvia-contactbar"><div class="orvia-contactbar__inner"><a href="mailto:hello@orvia.org.uk">hello@orvia.org.uk</a><a href="tel:03300433703">0330 043 3703</a><span class="push">ORVIA Oversight Ltd · Human first. Evidence before assumption.</span></div></div>`;
