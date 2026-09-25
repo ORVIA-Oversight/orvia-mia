@@ -1,0 +1,19 @@
+MIA STRIPE — AFTER PAYMENT REDIRECT
+
+Set all three MIA Payment Links to:
+
+https://mia.orvia.org.uk/onboarding?session_id={CHECKOUT_SESSION_ID}
+
+Payment Links:
+Story Session:
+https://book.stripe.com/6oU28q3GocZ029XcPJ0oM0O
+
+Archive Rescue:
+https://book.stripe.com/bJe3cu5OwbUWdSFdTN0oM0P
+
+Life Story:
+https://book.stripe.com/bJe9ASgta0ce5m9bLF0oM0Q
+
+Why:
+Stripe replaces {CHECKOUT_SESSION_ID} with the completed checkout ID.
+The MIA server function then verifies the session directly with Stripe before accepting onboarding data.

@@ -1,0 +1,142 @@
+<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#082653">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/mia.css">
+<title>Start your MIA | MIA Memories</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="description" content="Private post-payment onboarding for MIA Memories customers.">
+<style>
+.onboard-grid{display:grid;grid-template-columns:.82fr 1.18fr;gap:38px;align-items:start}
+.onboard-card{background:#fff;border:1px solid var(--mia-line);border-radius:24px;padding:28px;box-shadow:0 14px 40px rgba(6,29,61,.07)}
+.onboard-form{display:grid;gap:20px} .onboard-form fieldset{border:0;padding:0;margin:0}
+.onboard-form legend,.onboard-form label strong{display:block;color:var(--mia-navy);font-weight:800;margin-bottom:8px}
+.onboard-form input[type=text],.onboard-form input[type=email],.onboard-form select,.onboard-form textarea{width:100%;padding:13px;border:1px solid var(--mia-line);border-radius:11px;font:inherit;background:white}
+.checks{display:grid;gap:8px} .checks label{display:flex;gap:9px;align-items:flex-start}
+.small{font-size:.82rem;color:var(--mia-muted)} .status-box{padding:16px;border-radius:14px;background:#eef7fc;margin-bottom:20px}
+.founder-video{display:none;margin:18px 0} .founder-video video{width:100%;border-radius:18px}
+@media(max-width:900px){.onboard-grid{grid-template-columns:1fr}}
+</style>
+</head><body><header class="site-header">
+  <div class="shell nav-shell">
+    <a class="brand brand-logo" href="/" aria-label="MIA Memories home"><img src="ChatGPT Image Sep 25, 2026, 03_00_49 PM.png" alt="MIA Memories"></a>
+    <button class="menu" type="button" aria-label="Open navigation" aria-expanded="false">Menu</button>
+    <nav class="navlinks" aria-label="Primary navigation">
+      <a href="/#how">How it works</a>
+      <a href="/services">Services</a>
+      <a href="/#stories">Stories &amp; voice</a>
+      <a href="/#later">For Later</a>
+      <a href="/trust">Trust</a>
+      <a href="/pricing">Pricing</a>
+    </nav>
+    <div class="nav-actions"><a class="text-link" href="/app/">Explore demo</a><a class="btn btn-warm" href="/services#story-session">Book a Story Session</a></div>
+  </div>
+</header><main>
+<section class="pagehero warm-pagehero"><div class="shell"><p class="eyebrow">Welcome to MIA</p><h1>Your story starts here.</h1><p>Thank you for trusting us with something important. You do not need to organise everything before you begin.</p></div></section>
+<section class="section white"><div class="shell onboard-grid">
+<div>
+  <div id="payment-status" class="status-box"><strong>Checking your booking…</strong><br><span class="small">We are confirming the Stripe checkout before collecting onboarding information.</span></div>
+  <div class="founder-video" id="founder-wrap"><p class="eyebrow">A welcome from John</p><video id="founder-video" controls playsinline preload="metadata"><source src="mia-founder-welcome.mp4" type="video/mp4"></video></div>
+  <h2>You stay in control.</h2>
+  <p>You choose what is included, what stays private and who is involved. Optional publicity, AI-assisted transcription and any future Presence work are separate choices.</p>
+  <div class="step-list">
+    <div><span>1</span><p><strong>Tell us who this is for.</strong><br>Only enough to prepare the project.</p></div>
+    <div><span>2</span><p><strong>Tell us what matters.</strong><br>Photos, voice, video, stories, documents or a mixture.</p></div>
+    <div><span>3</span><p><strong>Tell us what you already have.</strong><br>Albums, a phone, recordings, boxes, letters or nothing yet.</p></div>
+    <div><span>4</span><p><strong>A human reviews the next step.</strong><br>No consequential decision is delegated to an avatar or AI.</p></div>
+  </div>
+</div>
+
+<div class="onboard-card">
+<form id="mia-onboarding" class="onboard-form" hidden>
+  <input type="hidden" id="session_id" name="session_id">
+  <div><label><strong>Who is this MIA for?</strong><select name="who_for" required>
+    <option value="">Choose one</option><option>Myself</option><option>Parent</option><option>Grandparent</option><option>Partner</option><option>Family member</option><option>Family archive</option><option>Someone who has died</option><option>Gift</option><option>Other</option>
+  </select></label></div>
+
+  <fieldset><legend>What would you like to preserve?</legend><div class="checks">
+    <label><input type="checkbox" name="preserve_types" value="Photos"> Photos</label>
+    <label><input type="checkbox" name="preserve_types" value="Voice"> Voice</label>
+    <label><input type="checkbox" name="preserve_types" value="Video"> Video</label>
+    <label><input type="checkbox" name="preserve_types" value="Stories"> Stories</label>
+    <label><input type="checkbox" name="preserve_types" value="Documents"> Documents</label>
+    <label><input type="checkbox" name="preserve_types" value="Family history"> Family history</label>
+    <label><input type="checkbox" name="preserve_types" value="Messages for later"> Messages for later</label>
+  </div></fieldset>
+
+  <fieldset><legend>What do you already have?</legend><div class="checks">
+    <label><input type="checkbox" name="material_types" value="Phone"> Phone photos/files</label>
+    <label><input type="checkbox" name="material_types" value="Albums"> Albums</label>
+    <label><input type="checkbox" name="material_types" value="Boxes"> Boxes or loose material</label>
+    <label><input type="checkbox" name="material_types" value="Cloud photos"> Cloud photos</label>
+    <label><input type="checkbox" name="material_types" value="Voice recordings"> Voice recordings</label>
+    <label><input type="checkbox" name="material_types" value="Video"> Video</label>
+    <label><input type="checkbox" name="material_types" value="Letters or books"> Letters or books</label>
+    <label><input type="checkbox" name="material_types" value="None yet"> Nothing yet</label>
+  </div></fieldset>
+
+  <div><label><strong>Who should be involved?</strong><select name="contributors">
+    <option value="">Choose if known</option><option>Just me</option><option>Family contributor</option><option>Trusted person</option><option>Recipient later</option><option>Not sure yet</option>
+  </select></label></div>
+
+  <div><label><strong>Anything we should keep private or leave out?</strong><textarea name="privacy_boundaries" rows="4" maxlength="3000" placeholder="You can keep this brief. Please do not add passwords, detailed medical records or highly sensitive third-party information here."></textarea></label></div>
+
+  <fieldset><legend>Your choices</legend><div class="checks">
+    <label><input type="checkbox" name="ai_transcription_consent"> I am happy for approved AI-assisted transcription to be used, with human review. <span class="small">(optional)</span></label>
+    <label><input type="checkbox" name="publicity_consent"> I am happy to be contacted separately about an optional case study or publicity. <span class="small">(optional)</span></label>
+    <label><input type="checkbox" name="future_presence_consent"> I am happy to be contacted later about future Presence features. <span class="small">(optional; this does not authorise creation now)</span></label>
+    <label><input type="checkbox" name="marketing_consent"> I would like occasional MIA news and offers. <span class="small">(optional)</span></label>
+  </div></fieldset>
+
+  <fieldset><legend>Starting work</legend><div class="checks">
+    <label><input type="checkbox" name="early_start_requested"> I expressly ask MIA to begin the service during the 14-day cancellation period.</label>
+    <label><input type="checkbox" name="early_start_acknowledged"> If I ask MIA to start early, I understand I may have to pay for service supplied before I cancel, and that if the service is fully performed after my express request and acknowledgement I may lose the right to cancel once it is fully performed.</label>
+  </div><p class="small">Leave both boxes unticked if you do not want work to begin during the cancellation period.</p></fieldset>
+
+  <label class="checks"><span><input type="checkbox" name="terms_ack" required> I have read the <a href="/terms" target="_blank"><u>Terms</u></a>, <a href="/privacy" target="_blank"><u>Privacy Notice</u></a> and <a href="/cancellation" target="_blank"><u>Cancellation Information</u></a>.</span></label>
+  <button class="btn btn-warm" type="submit">Send my MIA onboarding</button>
+  <p class="small">Submitting this form does not authorise publication, synthetic representation or release of material to another person.</p>
+</form>
+<div id="onboarding-result"></div>
+</div>
+</div></section>
+</main><footer class="footer">
+  <div class="shell footer-grid">
+    <div><a class="brand footer-brand brand-logo" href="/"><img src="ChatGPT Image Sep 25, 2026, 03_00_49 PM.png" alt="MIA Memories"></a><p>Your life. Your people. Your story. Kept for when it matters.</p></div>
+    <div><h4>Start today</h4><a href="/services#story-session">Story Session</a><a href="/services#archive-rescue">Archive Rescue</a><a href="/services#life-story">Life Story</a></div>
+    <div><h4>Trust</h4><a href="/privacy">Privacy</a><a href="/terms">Terms</a><a href="/cancellation">Cancellation</a><a href="/cookies">Cookies</a><a href="/complaints">Complaints</a></div>
+    <div><h4>ORVIA</h4><a href="https://orvia.org.uk/">ORVIA Oversight</a><a href="/contact">Contact MIA</a></div>
+  </div>
+  <div class="shell footnote"><span>ORVIA Oversight Ltd · Company No. 16123685 · 0330 043 3703</span><span>MIA Memories · Human first. Originals preserved. Nothing invented.</span></div>
+</footer>
+<script src="assets/mia.js"></script>
+<script>
+(function(){
+ const qs=new URLSearchParams(location.search), sid=qs.get('session_id');
+ const status=document.getElementById('payment-status'), form=document.getElementById('mia-onboarding'), result=document.getElementById('onboarding-result');
+ const fw=document.getElementById('founder-wrap'), fv=document.getElementById('founder-video');
+ if(fv){fv.addEventListener('loadeddata',()=>fw.style.display='block'); fv.addEventListener('error',()=>fw.style.display='none');}
+ if(!sid){status.innerHTML='<strong>We cannot see a checkout reference.</strong><br><span class="small">If you have paid, contact hello@orvia.org.uk and we will help you continue.</span>'; return;}
+ document.getElementById('session_id').value=sid;
+ fetch('/api/verify-payment?session_id='+encodeURIComponent(sid),{cache:'no-store'}).then(r=>r.json()).then(d=>{
+   if(!d.verified) throw new Error('Payment not verified');
+   status.innerHTML='<strong>Booking confirmed.</strong><br><span class="small">'+(d.service_label||'MIA service')+(d.customer_name?' · '+d.customer_name:'')+'</span>';
+   form.hidden=false;
+ }).catch(()=>{status.innerHTML='<strong>We could not verify the payment automatically.</strong><br><span class="small">Please contact hello@orvia.org.uk before entering information here.</span>';});
+
+ form.addEventListener('submit',async e=>{
+   e.preventDefault(); const fd=new FormData(form);
+   const payload={session_id:sid,who_for:fd.get('who_for'),privacy_boundaries:fd.get('privacy_boundaries')||'',
+     preserve_types:fd.getAll('preserve_types'),material_types:fd.getAll('material_types'),
+     contributors:fd.get('contributors')?[fd.get('contributors')]:[],
+     ai_transcription_consent:fd.has('ai_transcription_consent'),publicity_consent:fd.has('publicity_consent'),
+     future_presence_consent:fd.has('future_presence_consent'),marketing_consent:fd.has('marketing_consent'),
+     early_start_requested:fd.has('early_start_requested'),early_start_acknowledged:fd.has('early_start_acknowledged')};
+   if(payload.early_start_requested && !payload.early_start_acknowledged){alert('Please read and acknowledge the early-start information, or untick the early-start request.');return;}
+   const btn=form.querySelector('button[type=submit]'); btn.disabled=true; btn.textContent='Sending…';
+   try{const r=await fetch('/api/onboarding-submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}); const d=await r.json(); if(!r.ok) throw new Error(d.error||'Unable to submit');
+     form.hidden=true; result.innerHTML='<div class="notice"><strong>Thank you. We have your starting point.</strong><br>A real person will review the next step before recording, upload or sensitive processing begins.</div>';
+   }catch(err){alert(err.message);btn.disabled=false;btn.textContent='Send my MIA onboarding';}
+ });
+})();
+</script></body></html>

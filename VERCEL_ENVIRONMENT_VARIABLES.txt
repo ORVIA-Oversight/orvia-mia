@@ -1,0 +1,9 @@
+VERCEL PRODUCTION ENVIRONMENT VARIABLES
+
+STRIPE_SECRET_KEY=
+SUPABASE_URL=https://qokkyynptzeuuebykmbo.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=
+
+Never commit either secret key to GitHub.
+Set them in Vercel Project > Settings > Environment Variables and apply to Production.
+After saving them, redeploy the MIA project.

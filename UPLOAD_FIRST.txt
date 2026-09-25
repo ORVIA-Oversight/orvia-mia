@@ -1,0 +1,61 @@
+MIA MEMORIES — UPLOAD FIRST
+25 September 2026
+
+UPLOAD THESE FILES TO THE ROOT OF:
+ORVIA-Oversight/orvia-mia
+
+REPLACE existing files:
+- services.html
+- terms.html
+- privacy.html
+- cookies.html
+
+ADD new files:
+- onboarding.html
+- cancellation.html
+- complaints.html
+
+ADD this folder:
+- api/
+  - verify-payment.js
+  - onboarding-submit.js
+
+DO NOT PUT SECRET KEYS INTO GITHUB.
+
+THEN IN VERCEL:
+Project > Settings > Environment Variables
+Add for Production:
+1. STRIPE_SECRET_KEY
+   Your live Stripe secret key. Do not paste it into GitHub or public chat.
+2. SUPABASE_URL
+   https://qokkyynptzeuuebykmbo.supabase.co
+3. SUPABASE_SERVICE_ROLE_KEY
+   The service-role key for the ORVIA Supabase project. Never expose it client-side.
+
+Redeploy after adding the environment variables.
+
+THEN UPDATE THE THREE STRIPE PAYMENT LINKS:
+After payment -> Redirect customers to:
+https://mia.orvia.org.uk/onboarding?session_id={CHECKOUT_SESSION_ID}
+
+Use the SAME success URL for all three links.
+The onboarding page reads the service from Stripe metadata, not from the browser.
+
+IMPORTANT:
+Do not run the Meta paid campaign until:
+- /services loads with the three Stripe buttons;
+- a real/test checkout returns to /onboarding with a Checkout Session ID;
+- /api/verify-payment verifies the payment;
+- the onboarding form submits successfully into Supabase;
+- Terms, Privacy, Cancellation and Cookies pages are live;
+- the payment/contract confirmation email process is active.
+
+FOUNDER VIDEO:
+When the final Synthesia/HeyGen MIA founder welcome is ready, upload it to the repo root as:
+mia-founder-welcome.mp4
+
+The onboarding page is already coded to show it automatically when that filename exists.
+
+FAVICON:
+The exact ORVIA globe asset was not present in the MIA repo, so this pack does NOT invent a replacement.
+Upload the approved ORVIA globe separately as favicon.svg (or send it to ChatGPT and it can be wired across every page).

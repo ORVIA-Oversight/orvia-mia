@@ -1,0 +1,26 @@
+SUBJECT: Welcome to MIA Memories — your booking confirmation
+
+Hi {{first_name}},
+
+Thank you for choosing MIA Memories.
+
+Your booking:
+Service: {{service_name}}
+Price paid: {{price}}
+Order date: {{date}}
+
+Your next step is to complete the short MIA onboarding:
+https://mia.orvia.org.uk/onboarding
+
+Your service is governed by the information available at the time you ordered:
+Terms: https://mia.orvia.org.uk/terms
+Privacy: https://mia.orvia.org.uk/privacy
+Cancellation: https://mia.orvia.org.uk/cancellation
+
+Unless you expressly ask us to start within the normal cancellation period, we will not treat payment alone as a request for early performance.
+
+If you need help, reply to this email or call 0330 043 3703.
+
+MIA Memories
+by ORVIA Oversight Ltd
+Company No. 16123685
