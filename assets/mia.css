@@ -141,3 +141,48 @@
 .trust-actions.left{justify-content:flex-start}
 @media(max-width:1100px){.mia-credential-grid{grid-template-columns:repeat(2,1fr)}.mia-founder-grid{grid-template-columns:1fr}.mia-founder-photo{max-width:620px}}
 @media(max-width:720px){.mia-credential-grid{grid-template-columns:1fr}.mia-credential{min-height:155px}.mia-founder-photo,.mia-founder-photo img{min-height:350px}}
+
+
+/* === ORVIA slim utility bar — matches main ORVIA site === */
+.orvia-utility-bar{
+  background:#082653;
+  color:#dbe7f4;
+  font-family:Inter,"Segoe UI",Arial,sans-serif;
+  font-size:13px;
+  line-height:1;
+  position:relative;
+  z-index:70;
+}
+.orvia-utility-wrap{
+  width:min(1560px,calc(100% - 48px));
+  margin:0 auto;
+  min-height:36px;
+  display:flex;
+  align-items:center;
+  gap:22px;
+}
+.orvia-utility-left,
+.orvia-utility-right{
+  display:flex;
+  align-items:center;
+  gap:20px;
+}
+.orvia-utility-right{margin-left:auto}
+.orvia-utility-bar a{
+  color:#fff;
+  text-decoration:none;
+  font-weight:500;
+  margin:0;
+  padding:0;
+}
+.orvia-utility-bar a:hover{color:#9fdde0}
+
+@media(max-width:720px){
+  .orvia-utility-wrap{
+    width:min(100% - 28px,1560px);
+    min-height:40px;
+    gap:12px;
+  }
+  .orvia-utility-left{gap:12px;font-size:11px}
+  .orvia-utility-right{display:none}
+}
