@@ -81,8 +81,9 @@
     const existing=await allMemories(); if(existing.length) return;
     const now=new Date().toISOString();
     const examples=[
-      {id:uid(),title:"A first memory",date:"2018-07-18",dateCertainty:"USER SUPPLIED",story:"A small example to show how MIA keeps the story around a memory. Replace or delete this and add your own.",people:["Sophie","Dad"],place:"The beach",source:"Uploaded manually",visibility:"PRIVATE",recipient:"",releaseType:"Available now",mediaIds:[],createdAt:now,updatedAt:now,synthetic:true},
-      {id:uid(),title:"A story for later",date:"2026-09-24",dateCertainty:"USER SUPPLIED",story:"Some words belong to another day. MIA can preserve them now and keep the release instruction beside the original story.",people:["Family"],place:"Home",source:"Uploaded manually",visibility:"LOCKED UNTIL",recipient:"My family",releaseType:"When I approve",mediaIds:[],createdAt:now,updatedAt:now,synthetic:true}
+      {id:uid(),title:"Sunday walks by the sea",date:"1978-08-13",dateCertainty:"USER SUPPLIED",story:"Margaret remembered the wind more than the weather — and the way everyone ended up laughing before they reached the café. It became one of those ordinary family rituals that meant more with every passing year.",people:["Margaret","Tom","Anna"],place:"Scarborough seafront",source:"Illustrative example",visibility:"PRIVATE",recipient:"",releaseType:"Available now",mediaIds:[],createdAt:now,updatedAt:now,synthetic:true},
+      {id:uid(),title:"The note in every lunchbox",date:"1986-09-03",dateCertainty:"USER SUPPLIED",story:"A tiny handwritten note went into school lunchboxes, suitcases and birthday cards. The words changed, but the message did not: you are loved, and someone is thinking about you.",people:["Margaret","Anna"],place:"Home",source:"Illustrative example",visibility:"FAMILY",recipient:"Family",releaseType:"Available now",mediaIds:[],createdAt:now,updatedAt:now,synthetic:true},
+      {id:uid(),title:"For the days you need me",date:"2026-09-24",dateCertainty:"USER SUPPLIED",story:"A message preserved for later: not an invented voice, not a reconstruction — simply words chosen and kept by the person who wanted them remembered.",people:["Margaret","Family"],place:"Home",source:"Illustrative example",visibility:"LOCKED UNTIL",recipient:"My family",releaseType:"When I approve",mediaIds:[],createdAt:now,updatedAt:now,synthetic:true}
     ];
     for(const m of examples) await putMemory(m);
   }
@@ -122,7 +123,17 @@
     const later=memories.filter(m=>m.releaseType && m.releaseType!=="Available now" && m.releaseType!=="Private");
     const recent=[...memories].sort((a,b)=>(b.updatedAt||"").localeCompare(a.updatedAt||"")).slice(0,3);
     const recentCards=(await Promise.all(recent.map(memoryCard))).join("");
-    return `<div class="hero-grid">
+    return `<section class="example-story">
+      <div class="example-story-copy">
+        <span class="example-badge">ILLUSTRATIVE EXAMPLE STORY</span>
+        <p class="eyebrow" style="margin-top:18px">MARGARET'S STORY</p>
+        <h2>A life filled with family, seaside walks and notes worth keeping.</h2>
+        <p>This example shows how MIA can keep photographs, stories, people, places and messages together without pretending an illustrative family is a real customer.</p>
+        <blockquote>“The little things are often the things everyone remembers.”</blockquote>
+      </div>
+      <div class="example-story-media"><img src="../ChatGPT Image Sep 25, 2026, 02_53_45 PM (3).png" alt="Illustrative family memory example"></div>
+    </section>
+    <div class="hero-grid">
       <section class="story-card">
         <div><p class="eyebrow">YOUR LIFE · YOUR PEOPLE · YOUR STORY</p><h2>${memories.length ? "Your memories, with the meaning kept around them." : "Start with one memory."}</h2>
         <p>MIA keeps the photograph, place, people, date, voice, story, context and original source together — while keeping provenance quietly behind the human experience.</p></div>
@@ -160,15 +171,15 @@
     const map=new Map();
     memories.filter(m=>m.place).forEach(m=>{if(!map.has(m.place))map.set(m.place,[]);map.get(m.place).push(m)});
     const rows=[...map.entries()];
-    return rows.length?`<div class="section-head"><div><p class="eyebrow">PLACES</p><h2>Where your story happened</h2></div><p>Map coordinates are not inferred in this MVP.</p></div><div class="place-grid">${rows.map(([p,ms])=>`<div class="place-card"><p class="eyebrow">PLACE · USER SUPPLIED</p><h3>⌖ ${escapeHTML(p)}</h3><div class="subtle">${ms.length} memor${ms.length===1?"y":"ies"} here</div></div>`).join("")}</div>`:`<div class="empty"><h3>No places added yet</h3></div>`;
+    return rows.length?`<div class="section-head"><div><p class="eyebrow">PLACES</p><h2>Where your story happened</h2></div><p>Map coordinates are not inferred in this release.</p></div><div class="place-grid">${rows.map(([p,ms])=>`<div class="place-card"><p class="eyebrow">PLACE · USER SUPPLIED</p><h3>⌖ ${escapeHTML(p)}</h3><div class="subtle">${ms.length} memor${ms.length===1?"y":"ies"} here</div></div>`).join("")}</div>`:`<div class="empty"><h3>No places added yet</h3></div>`;
   }
   function renderLater(memories){
     const rows=memories.filter(m=>m.releaseType && !["Available now","Private"].includes(m.releaseType));
-    return rows.length?`<div class="section-head"><div><p class="eyebrow">FOR LATER</p><h2>Memories with release instructions</h2></div><p>Release decisions are not automated in this MVP.</p></div><div class="later-grid">${rows.map(m=>`<button class="later-card" data-open="${m.id}" style="text-align:left;color:inherit"><p class="eyebrow">${escapeHTML(m.releaseType)}</p><h3>${escapeHTML(m.title)}</h3><div class="subtle">For ${escapeHTML(m.recipient||"a future recipient")} · ${escapeHTML(m.visibility)}</div></button>`).join("")}</div>`:`<div class="empty"><h3>No Letters or Memories for Later yet</h3><p>Create a memory and choose a future release instruction.</p></div>`;
+    return rows.length?`<div class="section-head"><div><p class="eyebrow">FOR LATER</p><h2>Memories with release instructions</h2></div><p>Release decisions are not automated in this release.</p></div><div class="later-grid">${rows.map(m=>`<button class="later-card" data-open="${m.id}" style="text-align:left;color:inherit"><p class="eyebrow">${escapeHTML(m.releaseType)}</p><h3>${escapeHTML(m.title)}</h3><div class="subtle">For ${escapeHTML(m.recipient||"a future recipient")} · ${escapeHTML(m.visibility)}</div></button>`).join("")}</div>`:`<div class="empty"><h3>No Letters or Memories for Later yet</h3><p>Create a memory and choose a future release instruction.</p></div>`;
   }
   function renderImport(){
     return `<div class="import-panel">
-      <section class="panel"><p class="eyebrow">MVP IMPORT</p><h2>Bring in memories without changing the originals.</h2><p class="subtle">Direct file upload is working now. ZIP and platform-specific importers are staged for the next build.</p>
+      <section class="panel"><p class="eyebrow">IMPORT</p><h2>Bring in memories without changing the originals.</h2><p class="subtle">Direct file upload is working now. ZIP and platform-specific importers are staged for the next build.</p>
         <div class="import-options">
           <button class="import-option" id="directImport"><span><b>Direct upload</b><small>Photo · video · voice · document</small></span><span>Working →</span></button>
           <div class="import-option"><span><b>ZIP archive</b><small>Basic bulk ZIP import</small></span><span class="pill">NEXT</span></div>
@@ -178,7 +189,7 @@
       </section>
       <section class="panel"><p class="eyebrow">PROVENANCE</p><h2>What MIA preserves now</h2><table class="audit-table">
         <tr><th>Field</th><th>Status</th></tr>
-        <tr><td>Original file bytes</td><td>Stored in browser IndexedDB</td></tr>
+        <tr><td>Original file bytes</td><td>Preserved in this browser until secure cloud archive migration</td></tr>
         <tr><td>Original filename/type/size</td><td>Recorded</td></tr>
         <tr><td>SHA-256</td><td>Calculated on import</td></tr>
         <tr><td>Import timestamp</td><td>Recorded</td></tr>
@@ -242,7 +253,7 @@
       <div class="dialog-actions"><button class="btn btn-soft" data-delete="${m.id}">Delete</button><button class="btn btn-primary" data-edit="${m.id}">Edit memory</button></div>
     </div></div>`;
     $("detailBody").querySelector("[data-edit]")?.addEventListener("click",()=>{$("detailDialog").close();openEdit(id)});
-    $("detailBody").querySelector("[data-delete]")?.addEventListener("click",async()=>{if(confirm("Delete this memory from this local prototype?")){await deleteMemory(id);$("detailDialog").close();render();toast("Memory deleted")}}); 
+    $("detailBody").querySelector("[data-delete]")?.addEventListener("click",async()=>{if(confirm("Delete this memory from this private MIA workspace?")){await deleteMemory(id);$("detailDialog").close();render();toast("Memory deleted")}}); 
     $("detailDialog").showModal();
   }
   async function saveForm(e){
@@ -306,7 +317,7 @@
     const audit=(await allAudit()).sort((a,b)=>(a.createdAt||"").localeCompare(b.createdAt||""));
     const manifest={
       product:"MIA Memories",
-      formatVersion:"0.2-local-mvp",
+      formatVersion:"0.3-mia-workspace",
       exportedAt:new Date().toISOString(),
       notice:"Archive contains a JSON manifest, audit trail and original uploaded binaries. Synthetic demonstration memories are explicitly labelled.",
       memories:[],
