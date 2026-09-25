@@ -260,3 +260,111 @@ input,textarea,select{border-color:#cfdbe3}
 .media-thumb .placeholder{font-size:2rem;color:#6b7b88}
 .example-story-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
 .sync-error{padding:14px 16px;border-radius:14px;background:#fff0ed;border:1px solid #f1c7be;color:#8b3527;margin:18px 0}
+
+/* === MIA mobile/PWA experience === */
+.mobile-bottom-nav{display:none}
+.capture-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.capture-btn{
+  display:inline-flex!important;align-items:center;justify-content:center;gap:6px;
+  width:auto!important;padding:10px 13px;border-radius:999px;border:1px solid #d4dee5;
+  background:#fff;color:#17365d;font-size:.76rem!important;font-weight:800!important;cursor:pointer
+}
+.capture-btn input{display:none}
+
+@media(max-width:760px){
+  body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+  .sidebar{display:none}
+  .app-shell{display:block}
+  .main{
+    padding:0 14px calc(110px + env(safe-area-inset-bottom));
+    width:100%;overflow-x:hidden
+  }
+  .orvia-app-bar{
+    margin:0 -14px 16px;padding:
+      calc(10px + env(safe-area-inset-top))
+      14px 10px;
+    font-size:10px
+  }
+  .orvia-app-bar span:first-child{display:none}
+  .topbar{gap:14px}
+  .topbar h1{font-size:clamp(2.25rem,13vw,3.5rem)}
+  .top-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .top-actions #installAppBtn{grid-column:1/-1}
+  .top-actions .btn{min-height:48px;padding:12px 14px}
+  .welcome-video{margin:18px 0;padding:16px;border-radius:20px;gap:16px}
+  .welcome-video h2{font-size:2rem}
+  .welcome-video video{border-radius:16px}
+  .example-story{margin:20px 0 6px;border-radius:20px}
+  .example-story-copy{padding:22px}
+  .example-story-copy h2{font-size:2.15rem}
+  .example-story-media{min-height:240px}
+  .hero-grid{gap:14px}
+  .story-card{min-height:auto;padding:22px;border-radius:20px}
+  .story-card h2{font-size:2.25rem}
+  .stats{grid-template-columns:1fr 1fr;gap:10px}
+  .metric-card{padding:18px;border-radius:18px}
+  .metric-card strong{font-size:2rem}
+  .section-head{margin:26px 0 12px;align-items:flex-start;gap:8px}
+  .section-head p:last-child{display:none}
+  .memory-card{border-radius:18px}
+  .empty{padding:34px 18px;border-radius:18px}
+  .recent-empty-actions{display:grid;grid-template-columns:1fr;gap:10px;max-width:320px;margin:18px auto 0}
+  .recent-empty-actions .btn{min-height:48px}
+  .memory-dialog{
+    width:100vw;max-width:none;height:100dvh;max-height:100dvh;
+    margin:0;border-radius:0
+  }
+  .memory-dialog form,.detail-dialog{
+    min-height:100dvh;padding:
+      calc(18px + env(safe-area-inset-top))
+      16px
+      calc(24px + env(safe-area-inset-bottom))
+  }
+  .dialog-head{position:sticky;top:0;background:#fbfaf7;z-index:3;padding-bottom:10px}
+  .dialog-actions{
+    position:sticky;bottom:0;background:#fbfaf7;padding:12px 0 calc(6px + env(safe-area-inset-bottom));
+    margin-top:18px
+  }
+  .dialog-actions .btn{min-height:48px;flex:1}
+  input,textarea,select{font-size:16px;min-height:48px}
+  textarea{min-height:140px}
+  .capture-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .capture-btn{min-height:46px;width:100%!important}
+  .capture-btn:last-child{grid-column:1/-1}
+  .mobile-bottom-nav{
+    position:fixed;z-index:60;left:0;right:0;bottom:0;
+    min-height:72px;padding:8px 10px calc(8px + env(safe-area-inset-bottom));
+    background:rgba(7,29,61,.97);backdrop-filter:blur(18px);
+    display:grid;grid-template-columns:1fr 1fr 68px 1fr 1fr;align-items:center;
+    border-top:1px solid rgba(255,255,255,.12);box-shadow:0 -12px 35px rgba(8,38,83,.16)
+  }
+  .mobile-nav,.mobile-add{
+    border:0;background:transparent;color:#c8d7e4;display:grid;place-items:center;gap:2px;min-height:48px
+  }
+  .mobile-nav span{font-size:1.08rem}
+  .mobile-nav small{font-size:.62rem}
+  .mobile-nav.active{color:#fff}
+  .mobile-nav.active span{color:#f2b544}
+  .mobile-add{
+    width:58px;height:58px;border-radius:50%;margin:-24px auto 0;
+    background:linear-gradient(135deg,#f28c28,#f2b544);color:#102540;
+    font-size:2rem;font-weight:500;box-shadow:0 10px 28px rgba(242,140,40,.35)
+  }
+  .toast{
+    right:12px;left:12px;bottom:calc(88px + env(safe-area-inset-bottom));text-align:center
+  }
+  .login-layout{min-height:calc(100dvh - 36px)}
+  .login-story{padding:30px 20px 22px}
+  .login-logo img{width:min(300px,88%);margin-bottom:20px}
+  .login-story h1{font-size:2.8rem}
+  .login-lead{font-size:.95rem}
+  .login-panel-wrap{padding:18px 16px 34px}
+  .login-card{padding:24px 20px;border-radius:22px}
+}
+@media(min-width:761px) and (max-width:1180px){
+  .app-shell{grid-template-columns:220px 1fr}
+  .sidebar{padding:22px 16px}
+  .app-logo{max-width:190px}
+  .main{padding:0 28px 70px}
+}
+.pwa-standalone .orvia-app-bar{padding-top:calc(12px + env(safe-area-inset-top))}
