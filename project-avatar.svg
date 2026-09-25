@@ -1,6 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="ORVIA I">
-  <rect width="64" height="64" rx="14" fill="#6A2E7C"/>
-  <rect x="5" y="5" width="54" height="54" rx="11" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="1.5"/>
-  <circle cx="12" cy="11" r="3" fill="#0B2D5C"/><circle cx="22" cy="11" r="3" fill="#2F7F86"/><circle cx="32" cy="11" r="3" fill="#F0A51A"/><circle cx="42" cy="11" r="3" fill="#6A2E7C"/><circle cx="52" cy="11" r="3" fill="#E34B23"/>
-  <text x="32" y="44" text-anchor="middle" fill="#FFFFFF" font-family="Arial,Helvetica,sans-serif" font-size="30" font-weight="900" letter-spacing="-1">I</text>
+  <circle cx="32" cy="32" r="28.5" fill="#6A2E7C"/>
+  <circle cx="32" cy="32" r="25.5" fill="none" stroke="rgba(255,255,255,.38)" stroke-width="1"/>
+  <circle cx="19.5" cy="13" r="1.5" fill="#0B2D5C"/>
+  <circle cx="25.75" cy="13" r="1.5" fill="#2F7F86"/>
+  <circle cx="32" cy="13" r="1.5" fill="#F0A51A"/>
+  <circle cx="38.25" cy="13" r="1.5" fill="#6A2E7C"/>
+  <circle cx="44.5" cy="13" r="1.5" fill="#E34B23"/>
+  <text x="32" y="39" text-anchor="middle" fill="#FFFFFF" font-family="Arial,Helvetica,sans-serif" font-size="30" font-weight="900">I</text>
+  <text x="32" y="49" text-anchor="middle" fill="#FFFFFF" font-family="Arial,Helvetica,sans-serif" font-size="4.3" font-weight="700" letter-spacing=".5">ORVIA</text>
 </svg>
