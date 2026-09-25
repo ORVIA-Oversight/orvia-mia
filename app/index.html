@@ -1,20 +1,22 @@
 <!doctype html>
 <html lang="en-GB">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="#f3eee7">
-  <title>MIA Memories | Private Memory Space</title>
-  <meta name="description" content="MIA Memories private life and legacy application prototype. Preserve the memory, the original and the story around it.">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#082653">
+  <title>MIA Memories | Your story</title>
+  <meta name="description" content="Your private MIA Memories workspace.">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/mia-app.css">
+  <style>html:not(.mia-authorised) body{visibility:hidden}</style>
 </head>
 <body>
   <div class="app-shell">
     <aside class="sidebar" aria-label="MIA navigation">
-      <a class="app-brand" href="../index.html" aria-label="MIA home">
-        <span class="brand-mark">MIA</span>
-        <span><b>MEMORIES</b><small>Memory · Identity · Authenticity</small></span>
+      <a class="app-brand" href="../" aria-label="MIA home">
+        <img class="app-logo" src="../ChatGPT Image Sep 25, 2026, 03_00_49 PM.png" alt="MIA Memories">
       </a>
+      <div class="workspace-label">PRIVATE FAMILY MEMORY SPACE</div>
       <nav class="side-nav">
         <button class="nav-item active" data-view="home"><span>⌂</span> Your story</button>
         <button class="nav-item" data-view="timeline"><span>◷</span> Timeline</button>
@@ -25,28 +27,31 @@
         <button class="nav-item" data-view="import"><span>⇧</span> Import</button>
       </nav>
       <div class="privacy-card">
-        <b>Private local prototype</b>
-        <p>Items added here stay in this browser on this device. Nothing is sent to a server in this build.</p>
+        <b>Your memories stay yours.</b>
+        <p>Private by default. Originals remain separate from edited or derived versions.</p>
       </div>
-      <a class="quiet-link" href="../trust.html">Trust & safety</a>
+      <a class="quiet-link" href="../trust.html">Trust &amp; safety</a>
+      <button class="quiet-link logout-link" id="logoutBtn" type="button">Sign out</button>
     </aside>
 
     <main class="main">
+      <div class="orvia-app-bar"><span>ORVIA Oversight Ltd</span><span id="accountEmail">Checking access…</span></div>
       <header class="topbar">
-        <div>
-          <p class="eyebrow">MIA MEMORIES</p>
-          <h1 id="viewTitle">Your story</h1>
-        </div>
-        <div class="top-actions">
-          <button class="btn btn-soft" id="exportBtn">Export archive</button>
-          <button class="btn btn-primary" id="addMemoryBtn">＋ Add a memory</button>
-        </div>
+        <div><p class="eyebrow">MIA MEMORIES</p><h1 id="viewTitle">Your story</h1></div>
+        <div class="top-actions"><button class="btn btn-soft" id="exportBtn">Export archive</button><button class="btn btn-primary" id="addMemoryBtn">＋ Add a memory</button></div>
       </header>
 
-      <div class="prototype-note" role="status">
-        <span>LOCAL MVP</span>
-        <p>This is a working browser-local build for product testing. Production accounts, encrypted cloud storage and multi-device sync are not connected yet.</p>
-      </div>
+      <section class="welcome-video">
+        <div class="video-copy">
+          <p class="eyebrow">A WELCOME FROM MIA</p>
+          <h2>Start with one story.</h2>
+          <p>You do not need to organise a lifetime before you begin. Watch the short welcome, then add the first memory you would never want your family to lose.</p>
+        </div>
+        <video controls playsinline preload="metadata" poster="../ChatGPT Image Sep 25, 2026, 04_19_45 PM (1).png">
+          <source src="../mia-founder-welcome.mp4" type="video/mp4">
+          <source src="../Create_a_second_cinematic_p (7).mp4" type="video/mp4">
+        </video>
+      </section>
 
       <section id="appView" class="view" aria-live="polite"></section>
     </main>
@@ -54,98 +59,31 @@
 
   <dialog id="memoryDialog" class="memory-dialog">
     <form method="dialog" id="memoryForm">
-      <div class="dialog-head">
-        <div><p class="eyebrow">PRESERVE A MEMORY</p><h2 id="dialogTitle">Add a memory</h2></div>
-        <button class="icon-btn" value="cancel" aria-label="Close">×</button>
-      </div>
+      <div class="dialog-head"><div><p class="eyebrow">PRESERVE A MEMORY</p><h2 id="dialogTitle">Add a memory</h2></div><button class="icon-btn" value="cancel" aria-label="Close">×</button></div>
       <input type="hidden" id="memoryId">
       <div class="form-grid">
-        <label class="wide">Title
-          <input id="title" required maxlength="120" placeholder="Weekend at the caravan">
-        </label>
-        <label>Date
-          <input id="date" type="date">
-        </label>
-        <label>Date confidence
-          <select id="dateCertainty">
-            <option value="USER SUPPLIED">User supplied</option>
-            <option value="VERIFIED">Verified</option>
-            <option value="SUPPORTED">Supported</option>
-            <option value="INFERRED">Inferred</option>
-            <option value="UNKNOWN">Unknown</option>
-          </select>
-        </label>
-        <label class="wide">Your story
-          <textarea id="story" rows="5" placeholder="What happened? Why did it matter? What would you want someone to remember?"></textarea>
-        </label>
-        <label>People
-          <input id="people" placeholder="Mia, Dad, Grandad">
-          <small>Separate names with commas.</small>
-        </label>
-        <label>Place
-          <input id="place" placeholder="Withernsea">
-        </label>
-        <label>Source
-          <select id="source">
-            <option>Uploaded manually</option>
-            <option>Phone</option>
-            <option>Google Photos</option>
-            <option>Facebook</option>
-            <option>Google Drive</option>
-            <option>OneDrive</option>
-            <option>WhatsApp</option>
-            <option>Scanned photograph</option>
-            <option>External disk</option>
-          </select>
-        </label>
-        <label>Visibility
-          <select id="visibility">
-            <option>PRIVATE</option>
-            <option>SHARED</option>
-            <option>FAMILY</option>
-            <option>BENEFICIARY</option>
-            <option>LOCKED UNTIL</option>
-          </select>
-        </label>
-        <label>For
-          <input id="recipient" placeholder="My daughter">
-        </label>
-        <label>Release
-          <select id="releaseType">
-            <option value="Available now">Available now</option>
-            <option value="Private">Private</option>
-            <option value="When I approve">When I approve</option>
-            <option value="At age 16">At age 16</option>
-            <option value="At age 18">At age 18</option>
-            <option value="At age 21">At age 21</option>
-            <option value="On their wedding day">On their wedding day</option>
-            <option value="After my death">After my death</option>
-            <option value="After authorised executor confirmation">After authorised executor confirmation</option>
-            <option value="Released by nominated guardian">Released by nominated guardian</option>
-            <option value="Never automatically release">Never automatically release</option>
-          </select>
-        </label>
-        <label class="wide upload-box">Original media
-          <input id="media" type="file" multiple accept="image/*,video/*,audio/*,.pdf,.txt">
-          <span>Photographs, video, voice or documents. Each file is hashed before being stored locally.</span>
-        </label>
+        <label class="wide">Title<input id="title" required maxlength="120" placeholder="Weekend at the caravan"></label>
+        <label>Date<input id="date" type="date"></label>
+        <label>Date confidence<select id="dateCertainty"><option value="USER SUPPLIED">User supplied</option><option value="VERIFIED">Verified</option><option value="SUPPORTED">Supported</option><option value="INFERRED">Inferred</option><option value="UNKNOWN">Unknown</option></select></label>
+        <label class="wide">Your story<textarea id="story" rows="5" placeholder="What happened? Why did it matter? What would you want someone to remember?"></textarea></label>
+        <label>People<input id="people" placeholder="Mum, Dad, Grandad"><small>Separate names with commas.</small></label>
+        <label>Place<input id="place" placeholder="Scarborough"></label>
+        <label>Source<select id="source"><option>Uploaded manually</option><option>Phone</option><option>Google Photos</option><option>Facebook</option><option>Google Drive</option><option>OneDrive</option><option>WhatsApp</option><option>Scanned photograph</option><option>External disk</option></select></label>
+        <label>Visibility<select id="visibility"><option>PRIVATE</option><option>SHARED</option><option>FAMILY</option><option>BENEFICIARY</option><option>LOCKED UNTIL</option></select></label>
+        <label>For<input id="recipient" placeholder="My daughter"></label>
+        <label>Release<select id="releaseType"><option value="Available now">Available now</option><option value="Private">Private</option><option value="When I approve">When I approve</option><option value="At age 16">At age 16</option><option value="At age 18">At age 18</option><option value="At age 21">At age 21</option><option value="On their wedding day">On their wedding day</option><option value="After my death">After my death</option><option value="After authorised executor confirmation">After authorised executor confirmation</option><option value="Released by nominated guardian">Released by nominated guardian</option><option value="Never automatically release">Never automatically release</option></select></label>
+        <label class="wide upload-box">Original media<input id="media" type="file" multiple accept="image/*,video/*,audio/*,.pdf,.txt"><span>Photographs, video, voice or documents. Each file is hashed before it is preserved.</span></label>
       </div>
       <div id="fileStatus" class="file-status"></div>
-      <div class="dialog-actions">
-        <button class="btn btn-soft" type="button" id="cancelDialog">Cancel</button>
-        <button class="btn btn-primary" type="submit">Preserve memory</button>
-      </div>
+      <div class="dialog-actions"><button class="btn btn-soft" type="button" id="cancelDialog">Cancel</button><button class="btn btn-primary" type="submit">Preserve memory</button></div>
     </form>
   </dialog>
 
   <dialog id="detailDialog" class="memory-dialog detail-dialog">
-    <div class="dialog-head">
-      <div><p class="eyebrow">MEMORY</p><h2 id="detailTitle">Memory</h2></div>
-      <button class="icon-btn" id="closeDetail" aria-label="Close">×</button>
-    </div>
+    <div class="dialog-head"><div><p class="eyebrow">MEMORY</p><h2 id="detailTitle">Memory</h2></div><button class="icon-btn" id="closeDetail" aria-label="Close">×</button></div>
     <div id="detailBody"></div>
   </dialog>
 
+  <script type="module" src="./auth.js"></script>
   <script src="../assets/mia-app.js"></script>
-</body>
-</html>
+</body></html>
