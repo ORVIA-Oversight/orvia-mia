@@ -38,3 +38,13 @@
 .video-links{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
 @media(max-width:1000px){.video-showcase{grid-template-columns:1fr;gap:28px}.video-copy{max-width:760px}}
 @media(max-width:720px){.video-frame{border-radius:18px;padding:7px}.video-frame video{border-radius:12px}.video-caption{align-items:flex-start;flex-direction:column;gap:6px}.product-video-showcase{margin-top:32px;padding-top:32px}}
+
+/* Header logo prominence — Sep 2026 */
+.nav-shell{height:92px}
+.brand-logo{min-width:220px}
+.brand-logo img{width:240px;max-height:70px;object-fit:contain;object-position:left center}
+@media(max-width:720px){
+  .nav-shell{height:78px}
+  .brand-logo{min-width:160px}
+  .brand-logo img{width:175px;max-height:54px}
+}
