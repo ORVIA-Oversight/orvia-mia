@@ -48,3 +48,13 @@
   .brand-logo{min-width:160px}
   .brand-logo img{width:175px;max-height:54px}
 }
+
+/* Header logo prominence — doubled Sep 2026 */
+.nav-shell{height:150px}
+.brand-logo{min-width:440px}
+.brand-logo img{width:480px;max-height:140px;object-fit:contain;object-position:left center}
+@media(max-width:720px){
+  .nav-shell{height:112px}
+  .brand-logo{min-width:300px}
+  .brand-logo img{width:350px;max-height:108px}
+}
