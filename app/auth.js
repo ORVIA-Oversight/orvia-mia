@@ -18,13 +18,15 @@ async function ensureAccess(userId){
 
 async function guard(){
   const {data:{session}}=await supabase.auth.getSession();
-  if(!session){ location.replace('./login.html'); return; }
+  if(!session){ location.replace('./login.html'); return null; }
   const ent=await ensureAccess(session.user.id);
-  if(!ent){ await supabase.auth.signOut(); location.replace('./login.html?access=missing'); return; }
+  if(!ent){ await supabase.auth.signOut(); location.replace('./login.html?access=missing'); return null; }
   document.documentElement.classList.add('mia-authorised');
   const email=document.getElementById('accountEmail'); if(email) email.textContent=session.user.email||'MIA customer';
   const logout=document.getElementById('logoutBtn');
   if(logout) logout.addEventListener('click',async()=>{await supabase.auth.signOut();location.replace('./login.html')});
+  return {session,user:session.user,entitlement:ent};
 }
-guard();
-export { supabase };
+
+const ready=guard();
+export { supabase, ready };
