@@ -67,8 +67,17 @@
     <button class="mobile-nav" data-view="memories"><span>▣</span><small>Memories</small></button>
     <button class="mobile-add" id="mobileAddBtn" aria-label="Add memory">＋</button>
     <button class="mobile-nav" data-view="people"><span>◉</span><small>People</small></button>
-    <button class="mobile-nav" data-view="later"><span>✉</span><small>For later</small></button>
+    <button class="mobile-nav" id="mobileMoreBtn"><span>•••</span><small>More</small></button>
   </nav>
+
+  <div class="mobile-more-sheet" id="mobileMoreSheet" hidden>
+    <button data-view="timeline"><span>◷</span> Timeline</button>
+    <button data-view="places"><span>⌖</span> Places</button>
+    <button data-view="later"><span>✉</span> For later</button>
+    <button data-view="import"><span>⇧</span> Import</button>
+    <a href="../trust.html"><span>✓</span> Trust &amp; safety</a>
+    <button id="mobileSignOut"><span>↪</span> Sign out</button>
+  </div>
 
   <dialog id="memoryDialog" class="memory-dialog">
     <form method="dialog" id="memoryForm">
