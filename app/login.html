@@ -26,26 +26,65 @@
       <label>Email<input id="email" type="email" autocomplete="email" required></label>
       <label>Password<input id="password" type="password" autocomplete="current-password" minlength="10" required></label>
       <p id="message" class="login-message" aria-live="polite"></p>
-      <button class="btn btn-primary login-submit" type="submit">Sign in to MIA</button>
-      <p class="login-help">Need access? <a href="../contact.html">Contact MIA</a>. Product access is only enabled where MIA is active on your ORVIA account.</p>
+      <button class="btn btn-primary login-submit" id="submitBtn" type="submit">Sign in to MIA</button>
+      <button class="login-switch" id="switchMode" type="button">Paid MIA customer? Activate your account</button>
+      <p class="login-help">MIA access is product-specific. Your MIA account does not unlock ORVIA Voice or any other ORVIA product unless that service is separately active.</p>
+      <p class="login-help">Need help? <a href="../contact.html">Contact MIA</a>.</p>
     </form>
   </section>
 </main>
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.57.4';
 const supabase=createClient('https://qokkyynptzeuuebykmbo.supabase.co','sb_publishable_4EaQGyC5dYqhCIiAPcymVg_SIouLR5h');
-const form=document.getElementById('loginForm'),msg=document.getElementById('message');
+const form=document.getElementById('loginForm'),msg=document.getElementById('message'),title=document.querySelector('.login-card h2'),intro=document.querySelector('.login-card .muted'),submitBtn=document.getElementById('submitBtn'),switchMode=document.getElementById('switchMode');
+let mode='signin';
+
+async function ensureMiaAccess(){
+  const {data:ent}=await supabase.from('hub_service_access').select('status').eq('service_code','mia').eq('status','active').maybeSingle();
+  if(ent) return true;
+  const {data,error}=await supabase.functions.invoke('mia-access',{body:{}});
+  if(error || !data?.active) throw new Error(data?.error || 'No paid MIA service is linked to this account.');
+  return true;
+}
+
 const existing=await supabase.auth.getSession();
-if(existing.data.session) location.replace('./');
+if(existing.data.session){
+  try{await ensureMiaAccess();location.replace('./');}catch{}
+}
+
+switchMode.addEventListener('click',()=>{
+  mode=mode==='signin'?'signup':'signin';
+  title.textContent=mode==='signin'?'Sign in':'Activate your MIA account';
+  intro.textContent=mode==='signin'?'Use the email linked to your MIA Memories account.':'Use the same email address you used when buying your MIA service.';
+  submitBtn.textContent=mode==='signin'?'Sign in to MIA':'Create MIA account';
+  switchMode.textContent=mode==='signin'?'Paid MIA customer? Activate your account':'Already activated? Sign in';
+  msg.textContent='';
+});
+
 form.addEventListener('submit',async e=>{
-  e.preventDefault(); msg.textContent='Checking your access…';
+  e.preventDefault(); msg.textContent='Checking your access…'; submitBtn.disabled=true;
   const email=document.getElementById('email').value.trim().toLowerCase();
   const password=document.getElementById('password').value;
-  const {data,error}=await supabase.auth.signInWithPassword({email,password});
-  if(error){msg.textContent=error.message;return;}
-  const {data:ent,error:entError}=await supabase.from('hub_service_access').select('status').eq('user_id',data.user.id).eq('service_code','mia').eq('status','active').maybeSingle();
-  if(entError||!ent){await supabase.auth.signOut();msg.textContent='MIA Memories is not active on this account. Contact MIA if you believe this is incorrect.';return;}
-  location.replace('./');
+  try{
+    if(mode==='signup'){
+      const {data,error}=await supabase.auth.signUp({email,password});
+      if(error) throw error;
+      if(!data.session){
+        msg.textContent='Account created. Check your email to verify it, then return here and sign in.';
+        mode='signin'; title.textContent='Sign in'; submitBtn.textContent='Sign in to MIA'; switchMode.textContent='Paid MIA customer? Activate your account';
+        return;
+      }
+    } else {
+      const {error}=await supabase.auth.signInWithPassword({email,password});
+      if(error) throw error;
+    }
+    await ensureMiaAccess();
+    location.replace('./');
+  }catch(err){
+    msg.textContent=err?.message || 'MIA access could not be activated.';
+  }finally{
+    submitBtn.disabled=false;
+  }
 });
 </script>
 </body></html>
