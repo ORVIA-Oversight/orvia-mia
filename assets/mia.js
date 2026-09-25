@@ -1,38 +1,24 @@
 document.addEventListener('DOMContentLoaded',()=>{
 
-  /* ORVIA Oversight corporate frame */
-  if(!document.querySelector('.orvia-parent-header')){
-    const corporateHeader=document.createElement('div');
-    corporateHeader.className='orvia-parent-header';
-    corporateHeader.innerHTML=`
-      <div class="orvia-parent-wrap orvia-parent-nav">
-        <a class="orvia-parent-brand" href="https://orvia.org.uk/" aria-label="ORVIA Oversight home">
-          <img src="https://orvia.org.uk/assets/orvia-logo.png" alt="ORVIA Oversight">
-        </a>
-        <button class="orvia-parent-menu" type="button" aria-label="Open ORVIA navigation" aria-expanded="false">☰</button>
-        <nav class="orvia-parent-links" aria-label="ORVIA Oversight navigation">
-          <a href="https://orvia.org.uk/why-orvia">Why ORVIA</a>
-          <a href="https://orvia.org.uk/#routes">Who We Help</a>
-          <a href="https://orvia.org.uk/#services">Services</a>
-          <a href="https://orvia.org.uk/vita">ORVIA Method</a>
-          <a href="https://orvia.org.uk/voice">Voice</a>
-        </nav>
-        <div class="orvia-parent-actions">
-          <a class="orvia-btn orvia-btn-outline" href="https://orvia.org.uk/customer-access">Customer Access</a>
-          <a class="orvia-btn orvia-btn-primary" href="https://orvia.org.uk/contact#book">Talk to ORVIA</a>
+  /* ORVIA Oversight slim utility bar */
+  if(!document.querySelector('.orvia-utility-bar')){
+    const utility=document.createElement('div');
+    utility.className='orvia-utility-bar';
+    utility.innerHTML=`
+      <div class="orvia-utility-wrap">
+        <div class="orvia-utility-left">
+          <a href="mailto:hello@orvia.org.uk">hello@orvia.org.uk</a>
+          <a href="tel:03300433703">0330 043 3703</a>
+        </div>
+        <div class="orvia-utility-right">
+          <a href="https://orvia.org.uk/customer-access">Customer Access</a>
+          <a href="https://orvia.org.uk/voice">ORVIA Voice</a>
         </div>
       </div>`;
-    document.body.insertBefore(corporateHeader,document.body.firstChild);
-
-    const corporateMenu=corporateHeader.querySelector('.orvia-parent-menu');
-    if(corporateMenu){
-      corporateMenu.addEventListener('click',()=>{
-        const open=corporateHeader.classList.toggle('open');
-        corporateMenu.setAttribute('aria-expanded',String(open));
-      });
-    }
+    document.body.insertBefore(utility,document.body.firstChild);
   }
 
+  /* ORVIA Oversight corporate footer */
   if(!document.querySelector('.orvia-parent-footer')){
     const corporateFooter=document.createElement('footer');
     corporateFooter.className='orvia-parent-footer';
