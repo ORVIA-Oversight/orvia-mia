@@ -113,7 +113,7 @@ async function renderHome(){
     '<div class="metric-card"><strong>'+places.size+'</strong><span>places remembered</span></div>'+
     '<div class="metric-card"><strong>'+later.length+'</strong><span>for later</span></div></div></div>'+
     '<div class="section-head"><div><p class="eyebrow">CONTINUE YOUR STORY</p><h2>Recent memories</h2></div><p>Originals remain behind each memory.</p></div>'+
-    (recent.length?'<div class="memory-grid">'+recentCards+'</div>':'<div class="empty"><h3>Nothing here yet</h3><p>Add a photograph, voice note, video or story to begin.</p></div>');
+    (recent.length?'<div class="memory-grid">'+recentCards+'</div>':'<div class="empty recent-empty"><div class="recent-empty-icon">＋</div><h3>Nothing here yet</h3><p>Add a photograph, voice note, video, document or story to begin.</p><div class="recent-empty-actions"><button class="btn btn-primary" id="emptyUpload">Upload a memory</button><button class="btn btn-soft" id="emptyStory">Tell a story</button></div><p class="upload-note">Photos · video · voice · documents · up to 50 MB per file</p></div>');
 }
 
 async function renderMemories(){
@@ -190,6 +190,11 @@ function bindDynamic(){
   $('heroAdd')?.addEventListener('click',openAdd);
   $('exampleAdd')?.addEventListener('click',openAdd);
   $('directImport')?.addEventListener('click',openAdd);
+  $('emptyStory')?.addEventListener('click',openAdd);
+  $('emptyUpload')?.addEventListener('click',()=>{
+    openAdd();
+    setTimeout(()=>document.getElementById('media')?.click(),120);
+  });
 }
 
 function resetForm(){
