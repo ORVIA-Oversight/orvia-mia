@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded',()=>{
     document.body.insertBefore(utility,document.body.firstChild);
   }
 
+  /* Remove product-local footer when shared ORVIA footer is used */
+  document.querySelectorAll('footer.footer').forEach(el=>el.remove());
+
   /* ORVIA Oversight corporate footer */
   if(!document.querySelector('.orvia-parent-footer')){
     const corporateFooter=document.createElement('footer');
@@ -47,6 +50,8 @@ document.addEventListener('DOMContentLoaded',()=>{
             <a href="https://orvia.org.uk/about">About</a>
             <a href="https://orvia.org.uk/work-with-john">Work with John</a>
             <a href="https://orvia.org.uk/insights">Insights</a>
+            <a href="https://orvia.org.uk/veterans">Veterans</a>
+            <a href="https://www.trustaveteran.com/team/orvia" target="_blank" rel="noopener">Trust a Veteran</a>
             <a href="tel:03300433703">0330 043 3703</a>
             <a href="mailto:hello@orvia.org.uk">hello@orvia.org.uk</a>
           </div>
@@ -59,6 +64,13 @@ document.addEventListener('DOMContentLoaded',()=>{
               <a href="tel:03300433703" aria-label="Telephone">☎</a>
             </div>
           </div>
+        </div>
+        <div class="orvia-footer-trust" style="padding:14px 0;border-top:1px solid rgba(255,255,255,.12);display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:.82rem">
+          <strong>Verified trust:</strong>
+          <a href="https://orvia.org.uk/veterans">Armed Forces Covenant</a>
+          <a href="https://orvia.org.uk/veterans">ERS Bronze</a>
+          <a href="https://orvia.org.uk/veterans">Veteran-founded</a>
+          <a href="https://www.trustaveteran.com/team/orvia" target="_blank" rel="noopener">Trust a Veteran</a>
         </div>
         <div class="orvia-footer-legal">
           <span>© 2026 ORVIA Oversight Ltd</span>
