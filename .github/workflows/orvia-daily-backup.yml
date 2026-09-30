@@ -1,0 +1,36 @@
+name: ORVIA Daily Source Backup
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "15 1 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create recovery archive
+        shell: bash
+        run: |
+          mkdir -p backup-meta
+          git rev-parse HEAD > backup-meta/COMMIT_SHA.txt
+          git log -1 --format=fuller > backup-meta/LAST_COMMIT.txt
+          git ls-files > backup-meta/FILE_MANIFEST.txt
+          tar --exclude='.git' --exclude='./backup-meta' -czf "${{ github.event.repository.name }}-${{ github.sha }}.tar.gz" .
+
+      - name: Upload backup artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: website-source-backup
+          path: "*.tar.gz"
+          retention-days: 30
